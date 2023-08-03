@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize'
 import db from '../utils/db.js'
+import bcrypt from 'bcrypt'
 
 //declaramos la clase Skater con su constructor y sus respectivas funciones o métodos
 class Skater {
@@ -8,11 +9,11 @@ class Skater {
         this.id_skater = id_skater;
         this.email = email;
         this.nombre = nombre;
-        this.password = password;
         this.anos_experiencia = anos_experiencia; 
         this.especialidad = especialidad;
         this.foto = foto;
         this.estado = estado;
+        this.password = bcrypt.hashSync(password, 10);
     }
     //función que crea un nuevo skater
     createSkater = async () =>{

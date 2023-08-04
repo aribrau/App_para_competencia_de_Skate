@@ -13,12 +13,17 @@ class Skater {
         this.especialidad = especialidad;
         this.foto = foto;
         this.estado = estado;
-        this.password = bcrypt.hashSync(password, 10);
+        this.password = password;
+    }
+    //función para hashear el password del nuevo skater
+    hashPassword() {
+        this.password = bcrypt.hashSync(this.password, 10);
     }
     //función que crea un nuevo skater
     createSkater = async () =>{
         try {
             await skaterModel.sync();
+            this.hashPassword(); 
             const skater_created =  await skaterModel.create(this);
             if(skater_created) return skater_created.dataValues;
             else return false;
@@ -30,7 +35,9 @@ class Skater {
     getAllSkaters = async () =>{
         try {
             await skaterModel.sync();
-            return await skaterModel.findAll();
+            return await skaterModel.findAll({
+                attributes: ['id_skater', 'email', 'nombre', 'anos_experiencia', 'especialidad', 'foto','estado']
+            });
         } catch (error) {
             console.log('Get all skater error: ', error)
         }
@@ -40,7 +47,7 @@ class Skater {
         try {
             await skaterModel.sync();
             
-            const skater_updated =  await skaterModel.update(this,{where:{id:this.id}});
+            const skater_updated =  await skaterModel.update(this,{where:{id_skater:this.id_skater}});
             if(skater_updated.length > 0) return true;
             else return false;
         } catch (error) {

@@ -3,7 +3,7 @@ Proyecto Sprint Módulo 8 - Chamuteros del Code
 
 tareas:
 
--. hacer el CRUD de skater: <del>create</del>, <del>get all</del>, <del>update</del>, delete
+-. hacer el CRUD de skater: <del>create</del>, <del>get all</del>, <del>update</del>, <del>delete</del>
 -. hacer la API rest (HATEOAS)
 -. hacer middlewares 
 -. servir la funcionalidad para subir archivos con file-upload

@@ -15,15 +15,19 @@ export const createSkater = async (req, res) =>{
     const foto = req.body.foto;
     if(email && nombre && password && anos_experiencia && especialidad && foto){
         const skater = new Skater(null, email, nombre, password, anos_experiencia, especialidad, foto)
-        console.log('skater: ', skater)
         const model_result = await skater.createSkater();
-        console.log(model_result)
-        if(model_result != null) response.data = model_result;
-        else response.error = 'Error trying to create skater'
+        if(model_result != null) response.data = {
+            nombre: model_result.nombre,
+            email: model_result.email,
+            anos_experiencia: model_result.anos_experiencia,
+            especialidad: model_result.especialidad,
+            foto: model_result.foto
+        }
+        else response.error = 'Error creating skater'
     } else {
         response.error = "Missing required parameters";
     }
-    res.send(response);
+    res.status(200).send(response);
 };
 //controller para obtener a todos los skaters de la base de datos
 export const getAllSkaters = async (req, res) => {
@@ -35,7 +39,6 @@ export const getAllSkaters = async (req, res) => {
     try {
         const skater = new Skater();
         const model_result = await skater.getAllSkaters();
-        console.log('lista de skaters', model_result);
         if(model_result != null){
             if(model_result.length == 0){
                 response.error = 'There is no skaters in database'
@@ -47,20 +50,21 @@ export const getAllSkaters = async (req, res) => {
         }
         res.status(200).send(response);
     } catch (error){
-        console.log('Controller Error: ', error);
         response.error = 'Server Internal Error';
         res.status(500).send(response)
     }
 };
+//update skater controller
 export const updateSkater = async (req, res) => {
     let response = {
         msg:'skater update',
         error: null,
         data: null
     };
-    const id_skater = req.params.id;
-    const {email, nombre, password, anos_experiencia, especialidad} = req.body;
-    if (id_skater && email && nombre && password && anos_experiencia && especialidad){
+    try {
+        const id_skater = req.params.id;
+        const {email, nombre, password, anos_experiencia, especialidad} = req.body;
+        if (id_skater && email && nombre && password && anos_experiencia && especialidad){
         const skater = new Skater();
 
         skater.id_skater = id_skater;
@@ -72,10 +76,36 @@ export const updateSkater = async (req, res) => {
 
         const model_result = await skater.updateSkater(skater);
         if(model_result != null) response.data = model_result;
-        else response.error = 'Error al actualizar los datos'
+        else response.error = 'Error updating skater'
     } else {
-        responser.error = 'Faltan parámetros';
+        responser.error = 'Missing required parameters';
     };
-    res.send(response);
+    res.status(200).send(response);
+    } catch (error) {
+        response.error = 'Server Internal Error';
+        res.status(500).send(response)
+    }    
 };   
+//delete skater controller
+export const deleteSkater = async (req, res) =>{
+    let response = {
+        msg:'skater delete',
+        error: null,
+        data: null
+    };
+    const id_skater = req.params.id;
+    console.log('id', id_skater)
+    if(id_skater){
+        const skater = new Skater();
+        skater.id_skater = id_skater;
+
+        const model_result = await skater.deleteSkater(skater);
+        console.log('model', model_result)
+        if(model_result != null) response.data = model_result;
+        else response.error = 'Error trying to delete the skater'
+    }else{
+        response.error = "Missing required parameters";
+    }
+    res.status(200).send(response);
+};
 

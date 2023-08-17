@@ -1,6 +1,9 @@
 Proyecto Sprint Módulo 8 - Chamuteros del Code
 // abrir con markdown preview (ctrl+k, v)
 
+i. "npm i" para crear el directorio node_modules e instalar los paquetes necesarios para la ejecución de la app.
+ii. "npm run dev" para hacer correr el server
+
 tareas:
 
 1. <del>hacer el CRUD de skater: create, get all, update, delete</del>.
@@ -8,7 +11,7 @@ tareas:
 3. <del>servir la funcionalidad para subir archivos con file-upload</del>.
 4. implementar seguridad con JWT
 5. servir contenido dinámico con handlebars
-6. control de errores y status de los req y res
+6. control de errores y revision de códigos de estado
 7. <del>funcion vista admin</del>.
 
 

@@ -1,8 +1,8 @@
 Proyecto Sprint Módulo 8 - Chamuteros del Code
 // abrir con markdown preview (ctrl+k, v)
 
-i. "npm i" para crear el directorio node_modules e instalar los paquetes necesarios para la ejecución de la app.
-ii. "npm run dev" para hacer correr el server
+1. "npm i" para crear el directorio node_modules e instalar los paquetes necesarios para la ejecución de la app.
+2. "npm run dev" para hacer correr el server
 
 tareas:
 

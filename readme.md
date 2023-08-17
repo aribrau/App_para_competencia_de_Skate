@@ -4,7 +4,7 @@ Proyecto Sprint Módulo 8 - Chamuteros del Code
 tareas:
 
 1. <del>hacer el CRUD de skater: create, get all, update, delete</del>.
-2. hacer la API rest (HATEOAS)
+2. <del>hacer la API rest (HATEOAS)</del>.
 3. servir la funcionalidad para subir archivos con file-upload
 4. implementar seguridad con JWT
 5. servir contenido dinámico con handlebars
@@ -27,4 +27,4 @@ Requerimientos:
 4. Implementar Seguridad y restricción de recursos o contenido con JWT(2pts.)
 
 
------ actualizado 16-08-2023 20:08 ------
+----- actualizado 17-08-2023 17:57 ------

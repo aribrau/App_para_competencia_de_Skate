@@ -7,8 +7,8 @@ const _routes = {
         create: '/create-skater',
         login: '/login',
         all: '/get-all-skaters',
-        update: '/update-skater/:id',
-        delete: '/login'
+        update: '/update-skater',
+        delete: '/delete-skater'
     },
     admin:{
 
@@ -60,6 +60,7 @@ export const skaterLogin = async (req, res) => {
         error: null,
         data: null
     };
+    const _host = 'http://' + req.headers.host;
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -70,7 +71,10 @@ export const skaterLogin = async (req, res) => {
                 const storedPassword = model_result.password; 
                 const passwordsMatch = await bcrypt.compare(password, storedPassword);
                 if (passwordsMatch) {
-                    response.data = 'Login successful';
+                    response.data = {
+                        message: 'Login successful',
+                        profileUrl: _host + _routes.skater.self.replace(':id', model_result.id_skater)
+                    }
                     res.status(200).send(response);
                 } else {
                     response.error = 'Invalid credentials';
@@ -95,6 +99,7 @@ export const getSkaterById = async (req, res) => {
         error: null,
         data: null
     };
+    const _host = 'http://' + req.headers.host
     try {
         const id_skater = req.params.id;
         if (id_skater) {
@@ -129,6 +134,7 @@ export const getAllSkaters = async (req, res) => {
         error: null,
         data: null
     };
+    const _host = 'http://' + req.headers.host
     try {
         const skater = new Skater();
         const model_result = await skater.getAllSkaters();
@@ -136,7 +142,13 @@ export const getAllSkaters = async (req, res) => {
             if(model_result.length == 0){
                 response.error = 'There is no skaters in database'
             }
-            response.data = model_result
+            response.data = {
+                all: model_result,
+                links: {
+                    create: _host + _routes.skater.create,
+                    login: _host + _routes.skater.login,
+                }
+            }        
         }
         else{
             response.error = 'Error trying to get the skaters'

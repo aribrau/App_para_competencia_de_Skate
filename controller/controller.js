@@ -1,4 +1,4 @@
-import {Skater} from '../model/skater.js';
+import {Skater} from '../model/model.js';
 import bcrypt from 'bcrypt'; 
 
 const _routes = {
@@ -11,11 +11,9 @@ const _routes = {
         delete: '/delete-skater'
     },
     admin:{
-
-    }
-    
+        _admin: '/admin'
+    }   
 }
-
 //controller para crear un nuevo skater
 export const createSkater = async (req, res) =>{
     let response = {
@@ -24,13 +22,15 @@ export const createSkater = async (req, res) =>{
         data: null
     };
     const _host = 'http://' + req.headers.host
+    const upload_img = req.files.foto
+    const _foto = new Skater();
     const email = req.body.email;
     const nombre = req.body.nombre;
     const password = req.body.password; 
     const anos_experiencia = req.body.anos_experiencia;
     const especialidad = req.body.especialidad;
-    const foto = req.body.foto;
-    if(email && nombre && password && anos_experiencia && especialidad && foto){
+    const foto = await _foto.uploadSkaterImg(upload_img, _host)
+    if(email && nombre && password && anos_experiencia && especialidad){
         const skater = new Skater(null, email, nombre, password, anos_experiencia, especialidad, foto)
         const model_result = await skater.createSkater();
         if(model_result != null) response.data = {
@@ -105,18 +105,23 @@ export const getSkaterById = async (req, res) => {
         if (id_skater) {
             const skater = new Skater();
             const model_result = await skater.getSkaterById(id_skater);
-            if (model_result != null) response.data = {
-                email: model_result.email,
-                nombre: model_result.nombre,
-                anos_experiencia: model_result.anos_experiencia,
-                especialidad: model_result.especialidad,
-                links: {
-                    create: _host + _routes.skater.create,
-                    login: _host + _routes.skater.login,
-                    all: _host + _routes.skater.all,
-                    update: _host + _routes.skater.update + '/' + model_result.id_skater,
-                    delete: _host + _routes.skater.delete + '/' + model_result.id_skater
+                if (model_result != null) {
+                    response.data = {
+                    email: model_result.email,
+                    nombre: model_result.nombre,
+                    anos_experiencia: model_result.anos_experiencia,
+                    especialidad: model_result.especialidad,
+                    foto: model_result.foto,
+                    links: {
+                        create: _host + _routes.skater.create,
+                        login: _host + _routes.skater.login,
+                        all: _host + _routes.skater.all,
+                        update: _host + _routes.skater.update + '/' + model_result.id_skater,
+                        delete: _host + _routes.skater.delete + '/' + model_result.id_skater
+                    }
                 }
+            } else {
+                response.error = 'User does not exist'
             }
         } else {
             response.error = 'Error trying to get the skater';
@@ -213,4 +218,32 @@ export const deleteSkater = async (req, res) =>{
     }
     res.status(200).send(response);
 };
+export const changeStatus = async (req, res) => {
+    let response = {
+        msg:'skater status change',
+        error: null,
+        data: null
+    };
+    try {
+        const id_skater = req.body.id_skater;
+        const estado = req.body.estado
+        if (id_skater && estado){
+        const skater = new Skater();
+
+        skater.id_skater = id_skater;
+        skater.estado = estado;
+
+        const model_result = await skater.changeStatus(skater);
+        if(model_result != null) response.data = model_result;
+        else response.error = 'Error updating skater status'
+    } else {
+        responser.error = 'Missing required parameters';
+    };
+    res.status(200).send(response);
+    } catch (error) {
+        response.error = 'Server Internal Error';
+        res.status(500).send(response)
+    }    
+}; 
+
 

@@ -1,8 +1,14 @@
 import  {Sequelize} from 'sequelize'
 import db from '../utils/db.js'
 import bcrypt from 'bcrypt'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-//declaramos la clase Skater con su constructor y sus respectivas funciones o métodos
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const realDir = path.resolve(__dirname, '..');
+
+//Skater class
 class Skater {
 
     constructor(id_skater, email, nombre, password, anos_experiencia, especialidad, foto, estado){
@@ -102,6 +108,36 @@ class Skater {
                 console.log('Delete skater error: ', error);
             }
         };
+    uploadSkaterImg = async (upload_img, _host) => {
+        try {
+            const upload_dir = '/public/assets/img/';
+            const img_ext = path.extname(upload_img.name);
+            const img_name = 'skater_img_' + Date.now() + img_ext;
+            await upload_img.mv(realDir + upload_dir + img_name);
+            const img_path = `${_host}${upload_dir}${img_name}`; 
+            console.log('img_path', img_path)
+            return img_path;
+        } catch (error) {
+            console.log('error al subir la img', error)
+        }
+    }
+    changeStatus = async () =>{
+        const t = await db.transaction();
+        try {
+            await skaterModel.sync();
+            const skater_updated =  await skaterModel.update({estado: this.estado},{where:{id_skater:this.id_skater}});
+            if(skater_updated > 0) {
+                await t.commit();
+                return true;
+            } else {
+                await t.rollback();
+                return false;
+            }
+        } catch (error) {
+            await t.rollback();
+            console.log('Update user error: ', error);
+        }
+    }
 };
 
 //modelo User

@@ -5,9 +5,11 @@ tareas:
 
 1. <del>hacer el CRUD de skater: create, get all, update, delete</del>.
 2. <del>hacer la API rest (HATEOAS)</del>.
-3. servir la funcionalidad para subir archivos con file-upload
+3. <del>servir la funcionalidad para subir archivos con file-upload</del>.
 4. implementar seguridad con JWT
 5. servir contenido dinámico con handlebars
+6. control de errores y status de los req y res
+7. <del>funcion vista admin</del>.
 
 
 Indicaciones:
@@ -27,4 +29,4 @@ Requerimientos:
 4. Implementar Seguridad y restricción de recursos o contenido con JWT(2pts.)
 
 
------ actualizado 17-08-2023 17:57 ------
+----- actualizado 18-08-2023 01:20 ------

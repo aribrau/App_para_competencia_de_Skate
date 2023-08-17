@@ -38,6 +38,22 @@ class Skater {
             await t.rollback();
         }
     };
+    skaterLogin = async (email) =>{
+        try {
+            await skaterModel.sync();
+            return await skaterModel.findOne({ where: {email: email}})
+        } catch (error) {
+            console.log('login error', error)
+        }
+    }
+    getSkaterById = async (id_skater) => {
+        try {
+            await skaterModel.sync();
+            return await skaterModel.findByPk(id_skater);
+        } catch (error) {
+            console.log('get skater error: ', error);
+        }
+    }
     //función que obtiene todos los skaters
     getAllSkaters = async () =>{
         try {
